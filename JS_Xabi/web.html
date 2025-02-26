@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Web con Personalización</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            transition: all 0.5s ease; /* Transición para múltiples propiedades */
+            background-color: white;
+        }
+
+        /* Barra de navegación */
+        .navbar {
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .navbar a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        /* Menú desplegable */
+        .dropdown {
+            position: relative;
+            margin-left: 10px;
+        }
+
+        .dropbtn {
+            background-color: inherit;
+            color: white;
+            padding: 14px 20px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 180px;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 4px;
+            top: 100%;
+            left: 0;
+            margin-top: 5px;
+            padding: 10px;
+        }
+
+        /* Cuadrados de color */
+        .color-square {
+            width: 30px;
+            height: 30px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .color-square:hover {
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+
+        /* Botones de tamaño de fuente */
+        .font-size-btn {
+            background-color: #f1f1f1;
+            border: none;
+            padding: 8px 12px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        /* Botones de tipografía */
+        .font-btn {
+            background-color: #f1f1f1;
+            border: none;
+            padding: 8px 12px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+            width: 45%;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        /* Contenido principal */
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barra de navegación -->
+    <div class="navbar">
+        <a href="#home">Inicio</a>
+        <a href="#about">Acerca de</a>
+        <div class="dropdown">
+            <button class="dropbtn" onclick="toggleDropdown()">Personalizar</button>
+            <div class="dropdown-content" id="customDropdown">
+                <!-- Colores -->
+                <div class="section-title">Color de fondo</div>
+                <div class="color-row">
+                    <div class="color-square" style="background-color: #FF0000" onclick="changeColor('#FF0000')"></div>
+                    <div class="color-square" style="background-color: #0000FF" onclick="changeColor('#0000FF')"></div>
+                    <div class="color-square" style="background-color: #00FF00" onclick="changeColor('#00FF00')"></div>
+                    <div class="color-square" style="background-color: #FFFF00" onclick="changeColor('#FFFF00')"></div>
+                    <div class="color-square" style="background-color: #800080" onclick="changeColor('#800080')"></div>
+                </div>
+
+                <!-- Tamaño de fuente -->
+                <div class="section-title">Tamaño de texto</div>
+                <div class="button-row">
+                    <button class="font-size-btn" onclick="adjustFontSize(2)">+</button>
+                    <button class="font-size-btn" onclick="adjustFontSize(-2)">-</button>
+                </div>
+
+                <!-- Tipografía -->
+                <div class="section-title">Tipografía</div>
+                <div class="button-row">
+                    <button class="font-btn" onclick="changeFont('Arial')">Aa</button>
+                    <button class="font-btn" onclick="changeFont('Courier New')">Aa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="content" id="mainContent">
+        <h1>Bienvenido a mi Página Web</h1>
+        <p>Personaliza el estilo de esta página desde el menú desplegable.</p>
+    </div>
+
+    <script>
+        // Control del menú desplegable
+        function toggleDropdown() {
+            const dropdown = document.getElementById("customDropdown");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+
+        // Cambiar color de fondo
+        function changeColor(color) {
+            document.body.style.backgroundColor = color;
+            document.getElementById("customDropdown").style.display = "none";
+        }
+
+        // Ajustar tamaño de fuente
+        function adjustFontSize(change) {
+            const content = document.getElementById("mainContent");
+            let currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+            content.style.fontSize = (currentSize + change) + "px";
+        }
+
+        // Cambiar tipografía
+        function changeFont(font) {
+            const content = document.getElementById("mainContent");
+            content.style.fontFamily = font;
+            document.getElementById("customDropdown").style.display = "none";
+        }
+
+        // Cerrar menú al hacer clic fuera
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                const dropdown = document.getElementById("customDropdown");
+                if (dropdown.style.display === "block") {
+                    dropdown.style.display = "none";
+                }
+            }
+        };
+    </script>
+
+</body>
+</html>

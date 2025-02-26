@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalizar - Mi Página Web</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            transition: all 0.5s ease;
+            background-color: white;
+        }
+
+        /* Barra de navegación */
+        .navbar {
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 10px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            position: relative;
+            transition: background-color 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: #555;
+            border-radius: 4px;
+        }
+
+        /* Menú desplegable */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 220px;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+            border-radius: 4px;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 5px;
+            padding: 15px;
+            z-index: 1001;
+        }
+
+        /* Cuadrados de color */
+        .color-square {
+            width: 30px;
+            height: 30px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+
+        .color-square:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+
+        /* Botones de tamaño de fuente */
+        .font-control {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .font-control button {
+            background-color: #f1f1f1;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Botones de tipografía */
+        .font-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .font-btn {
+            background-color: #f1f1f1;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            flex: 1 1 45%;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: white;
+        }
+
+        body.dark-mode .navbar {
+            background-color: #2d2d2d;
+        }
+
+        body.dark-mode .dropdown-content {
+            background-color: #2d2d2d;
+            color: white;
+        }
+
+        body.dark-mode .font-control button,
+        body.dark-mode .font-btn {
+            background-color: #444;
+            color: white;
+        }
+
+        /* Contenido principal */
+        .content {
+            padding: 20px;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+        <a href="index.html" onclick="event.preventDefault()">Personalizar</a>
+        <a href="form.html">Formulario</a>
+        <a href="imagenes.html">Imágenes</a>
+        <button id="themeToggle">🌙</button>
+
+        <!-- Menú desplegable -->
+        <div class="dropdown-content" id="customDropdown">
+            <!-- Colores -->
+            <div class="section">
+                <h3>Color de Fondo</h3>
+                <div class="color-row">
+                    <div class="color-square" style="background-color: #FF0000" onclick="changeColor('#FF0000')"></div>
+                    <div class="color-square" style="background-color: #0000FF" onclick="changeColor('#0000FF')"></div>
+                    <div class="color-square" style="background-color: #00FF00" onclick="changeColor('#00FF00')"></div>
+                    <div class="color-square" style="background-color: #FFFF00" onclick="changeColor('#FFFF00')"></div>
+                    <div class="color-square" style="background-color: #800080" onclick="changeColor('#800080')"></div>
+                </div>
+            </div>
+
+            <!-- Tamaño de fuente -->
+            <div class="section">
+                <h3>Tamaño de Texto</h3>
+                <div class="font-control">
+                    <button onclick="adjustFontSize(2)">+</button>
+                    <button onclick="adjustFontSize(-2)">-</button>
+                </div>
+            </div>
+
+            <!-- Tipografía -->
+            <div class="section">
+                <h3>Tipografía</h3>
+                <div class="font-options">
+                    <button class="font-btn" onclick="changeFont('Arial')">Arial</button>
+                    <button class="font-btn" onclick="changeFont('Courier New')">Courier</button>
+                    <button class="font-btn" onclick="changeFont('Georgia')">Georgia</button>
+                    <button class="font-btn" onclick="changeFont('Verdana')">Verdana</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="content" id="mainContent">
+        <h1>Bienvenido al Panel de Personalización</h1>
+        <p>Modifica el estilo de la página usando las opciones disponibles</p>
+    </div>
+
+    <script>
+        // Control del menú desplegable
+        const personalizarLink = document.querySelector('.navbar a:first-child');
+        const dropdown = document.getElementById('customDropdown');
+
+        personalizarLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Cerrar menú al hacer clic fuera
+        window.addEventListener('click', (e) => {
+            if (!e.target.closest('.navbar a:first-child') && !e.target.closest('#customDropdown')) {
+                dropdown.style.display = 'none';
+            }
+        });
+
+        // Cambiar color de fondo
+        function changeColor(color) {
+            document.body.style.backgroundColor = color;
+            dropdown.style.display = 'none';
+        }
+
+        // Ajustar tamaño de fuente
+        function adjustFontSize(change) {
+            const content = document.getElementById("mainContent");
+            let currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+            content.style.fontSize = (currentSize + change) + "px";
+        }
+
+        // Cambiar tipografía
+        function changeFont(font) {
+            const content = document.getElementById("mainContent");
+            content.style.fontFamily = font;
+            dropdown.style.display = 'none';
+        }
+
+        // Modo oscuro/claro
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark);
+        });
+
+        // Cargar preferencia de tema
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
+</body>
+</html>

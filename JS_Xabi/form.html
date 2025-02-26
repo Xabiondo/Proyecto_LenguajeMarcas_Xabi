@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos específicos para el formulario */
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.8rem;
+            margin-top: 0.2rem;
+            display: none;
+        }
+
+        .success-message {
+            color: green;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        button[type="submit"] {
+            background: #4CAF50;
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button[type="submit"]:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+
+        /* Dark Mode */
+        body.dark-mode form {
+            background: #333;
+            color: white;
+        }
+
+        body.dark-mode input,
+        body.dark-mode select,
+        body.dark-mode textarea {
+            background: #444;
+            color: white;
+            border-color: #555;
+        }
+
+        body.dark-mode .error-message {
+            color: #ff4444;
+        }
+
+        body.dark-mode .success-message {
+            color: #00ff00;
+        }
+
+        body.dark-mode button[type="submit"] {
+            background: #007bff;
+        }
+
+        body.dark-mode button[type="submit"]:disabled {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-center">
+            <a href="index.html">Personalizar</a>
+            <a href="form.html">Formulario</a>
+            <a href="imagenes.html">Imágenes</a>
+            <button id="themeToggle">🌙</button>
+        </div>
+    </nav>
+
+    <div class="content">
+        <h1>Formulario de Contacto</h1>
+        <form id="contactForm">
+            <!-- Nombre completo -->
+            <div class="form-group">
+                <label for="fullName">Nombre completo:</label>
+                <input type="text" id="fullName" required>
+                <div class="error-message" id="nameError">El nombre es obligatorio</div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+                <div class="error-message" id="emailError">Email inválido</div>
+                <button type="button" onclick="validateEmail()" class="email-validate-btn">Validar Email</button>
+                <p id="emailValidationMessage" class="success-message"></p>
+            </div>
+
+            <!-- Género -->
+            <div class="form-group">
+                <label>Género:</label>
+                <div class="radio-group">
+                    <div>
+                        <input type="radio" id="male" name="gender" value="male">
+                        <label for="male">Masculino</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="female" name="gender" value="female">
+                        <label for="female">Femenino</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="other" name="gender" value="other">
+                        <label for="other">Otro</label>
+                    </div>
+                </div>
+                <div class="error-message" id="genderError">Seleccione un género</div>
+            </div>
+
+            <!-- País -->
+            <div class="form-group">
+                <label for="country">País:</label>
+                <select id="country" required>
+                    <option value="">Seleccione un país</option>
+                    <option value="es">España</option>
+                    <option value="mx">México</option>
+                    <option value="ar">Argentina</option>
+                    <option value="co">Colombia</option>
+                    <option value="other">Otro</option>
+                </select>
+                <div class="error-message" id="countryError">Seleccione un país</div>
+            </div>
+
+            <!-- Selectores jerárquicos -->
+            <div class="form-group" id="ccaaContainer" style="display: none;">
+                <label for="ccaa">CCAA:</label>
+                <select id="ccaa" class="form-control"></select>
+            </div>
+
+            <div class="form-group" id="townContainer" style="display: none;">
+                <label for="town">Pueblo:</label>
+                <select id="town" class="form-control"></select>
+            </div>
+
+            <!-- Mensaje -->
+            <div class="form-group">
+                <label for="message">Mensaje:</label>
+                <textarea id="message" rows="5" required></textarea>
+                <div class="error-message" id="messageError">El mensaje es obligatorio</div>
+            </div>
+
+            <!-- Botones -->
+            <div class="form-group">
+                <button type="button" onclick="validateForm()">Validar Todo</button>
+                <button type="submit" id="submitButton" disabled>Enviar</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Datos de regiones
+        const regions = {
+            es: [
+                { value: 'navarra', label: 'Navarra' },
+                { value: 'cataluna', label: 'Cataluña' },
+                { value: 'andalucia', label: 'Andalucía' }
+            ]
+        };
+
+        const towns = {
+            navarra: [
+                'Pamplona', 'Tudela', 'Estella', 'Sangüesa', 'Tafalla'
+            ],
+            cataluna: [
+                'Barcelona', 'Tarragona', 'Lleida', 'Girona'
+            ]
+        };
+
+        // Control de país
+        document.getElementById('country').addEventListener('change', function() {
+            const ccaaContainer = document.getElementById('ccaaContainer');
+            const townContainer = document.getElementById('townContainer');
+            
+            // Ocultar y resetear
+            ccaaContainer.style.display = 'none';
+            townContainer.style.display = 'none';
+            document.getElementById('ccaa').innerHTML = '';
+            document.getElementById('town').innerHTML = '';
+            
+            // Mostrar CCAA para España
+            if (this.value === 'es') {
+                ccaaContainer.style.display = 'block';
+                const ccaaSelect = document.getElementById('ccaa');
+                
+                // Añadir opciones
+                regions.es.forEach(region => {
+                    const option = document.createElement('option');
+                    option.value = region.value;
+                    option.textContent = region.label;
+                    ccaaSelect.appendChild(option);
+                });
+            }
+        });
+
+        // Control de CCAA
+        document.getElementById('ccaa').addEventListener('change', function() {
+            const townContainer = document.getElementById('townContainer');
+            const townSelect = document.getElementById('town');
+            
+            // Resetear pueblos
+            townContainer.style.display = 'none';
+            townSelect.innerHTML = '';
+            
+            // Mostrar pueblos para Navarra
+            if (this.value === 'navarra') {
+                townContainer.style.display = 'block';
+                
+                // Añadir pueblos
+                towns.navarra.forEach(town => {
+                    const option = document.createElement('option');
+                    option.value = town.toLowerCase();
+                    option.textContent = town;
+                    townSelect.appendChild(option);
+                });
+            }
+        });
+
+        // Validación de email
+        function validateEmail() {
+            const email = document.getElementById('email').value.trim();
+            const validationMessage = document.getElementById('emailValidationMessage');
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+            if (emailRegex.test(email)) {
+                validationMessage.textContent = '✅ Email válido';
+                validationMessage.style.color = 'green';
+                return true;
+            } else {
+                validationMessage.textContent = '❌ Email inválido: Formato usuario@dominio.com';
+                validationMessage.style.color = 'red';
+                return false;
+            }
+        }
+
+        // Validación completa
+        function validateForm() {
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const gender = document.querySelector('input[name="gender"]:checked');
+            const country = document.getElementById('country').value;
+            const message = document.getElementById('message').value.trim();
+            let isValid = true;
+
+            // Validar nombre
+            if (fullName === '') {
+                showError('nameError', 'El nombre es obligatorio');
+                isValid = false;
+            } else {
+                hideError('nameError');
+            }
+
+            // Validar email
+            if (!validateEmail()) {
+                isValid = false;
+            }
+
+            // Validar género
+            if (!gender) {
+                showError('genderError', 'Seleccione un género');
+                isValid = false;
+            } else {
+                hideError('genderError');
+            }
+
+            // Validar país
+            if (country === '') {
+                showError('countryError', 'Seleccione un país');
+                isValid = false;
+            } else {
+                hideError('countryError');
+            }
+
+            // Validar mensaje
+            if (message === '') {
+                showError('messageError', 'El mensaje es obligatorio');
+                isValid = false;
+            } else {
+                hideError('messageError');
+            }
+
+            // Habilitar botón
+            if (isValid) {
+                document.getElementById('submitButton').disabled = false;
+            }
+            return isValid;
+        }
+
+        // Funciones de error
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+
+        function hideError(elementId) {
+            document.getElementById(elementId).style.display = 'none';
+        }
+
+        // Envío del formulario
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (validateForm()) {
+                alert('¡Formulario enviado con éxito!');
+                this.reset();
+                document.getElementById('submitButton').disabled = true;
+                document.getElementById('emailValidationMessage').textContent = '';
+                
+                // Resetear selectores
+                document.getElementById('ccaaContainer').style.display = 'none';
+                document.getElementById('townContainer').style.display = 'none';
+                document.getElementById('ccaa').innerHTML = '';
+                document.getElementById('town').innerHTML = '';
+            }
+        });
+
+        // Dark Mode
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark);
+        });
+
+        // Cargar preferencia
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
+</body>
+</html>
