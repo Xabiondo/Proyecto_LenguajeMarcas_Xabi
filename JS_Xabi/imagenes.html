@@ -15,15 +15,70 @@
             <button id="themeToggle">🌙</button>
         </div>
     </nav>
-
+    
     <div class="content">
         <h1>Galería de Imágenes</h1>
-        <div class="gallery">
-            <!-- Aquí puedes añadir tus imágenes -->
-            <img src="placeholder.jpg" alt="Ejemplo">
+        
+        <!-- Sección 1: Botón Mágico -->
+        <div class="image-section">
+            <h2>Botón Mágico</h2>
+            <button id="magicButton">✨ ¡Mostrar Imagen!</button>
+            <div id="magicImageContainer" class="responsive-image"></div>
+        </div>
+
+        <!-- Sección 2: Carrusel Automático -->
+        <div class="image-section">
+            <h2>Carrusel Automático</h2>
+            <div class="carousel-container">
+                <img id="autoImage" src="placeholder.jpg" alt="Automático" class="responsive-image">
+            </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // Dark Mode
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        });
+
+        // Cargar preferencia de tema
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Botón Mágico
+        const magicImages = [
+            'yo.jpg',
+            'chavales.jpg',
+            'david.jpg',
+            'yono.jpg'
+        ];
+        let magicIndex = 0;
+
+        document.getElementById('magicButton').addEventListener('click', () => {
+            const container = document.getElementById('magicImageContainer');
+            container.innerHTML = `<img src="${magicImages[magicIndex]}" alt="Mágica">`;
+            magicIndex = (magicIndex + 1) % magicImages.length;
+        });
+
+        // Carrusel Automático
+        const autoImages = [
+            'Fotos Proyecto xabi/lerin.jpg',
+            'Fotos Proyecto xabi/mayores.jpg',
+            'Fotos Proyecto xabi/lerinfiestas1.jpg'
+        ];
+        let autoIndex = 0;
+
+        function changeImage() {
+            const img = document.getElementById('autoImage');
+            img.src = autoImages[autoIndex];
+            autoIndex = (autoIndex + 1) % autoImages.length;
+        }
+
+        // Cambiar cada 3 segundos
+        setInterval(changeImage, 300);
+    </script>
 </body>
 </html>

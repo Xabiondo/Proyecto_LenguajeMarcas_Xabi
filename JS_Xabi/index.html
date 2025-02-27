@@ -13,6 +13,21 @@
             transition: all 0.5s ease;
             background-color: white;
         }
+        /* Estilos para el botón de Dark Mode */
+#themeToggle {
+    background-color: transparent; /* Elimina fondo blanco */
+    border: none;                  /* Quita borde */
+    color: white;                  /* Color del icono */
+    font-size: 1.2em;              /* Tamaño del icono */
+    cursor: pointer;
+    padding: 14px 20px;            /* Alinea con otros elementos */
+}
+
+/* Hover del botón */
+#themeToggle:hover {
+    background-color: #555;        /* Color al pasar el ratón */
+    border-radius: 4px;
+}
 
         /* Barra de navegación */
         .navbar {
@@ -118,12 +133,7 @@
             color: white;
         }
 
-        body.dark-mode .font-control button,
-        body.dark-mode .font-btn {
-            background-color: #444;
-            color: white;
-        }
-
+      
         /* Contenido principal */
         .content {
             padding: 20px;
@@ -232,5 +242,7 @@
             document.body.classList.add('dark-mode');
         }
     </script>
+    
 </body>
 </html>
+
